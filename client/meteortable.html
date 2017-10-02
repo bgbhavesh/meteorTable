@@ -1,0 +1,239 @@
+<template name='meteortable'>
+<div class="row" style="margin: 0px">
+        {{#if dataReady}}
+            <div class="col-sm-12 col-md-12 col-lg-12 ">
+                {{#if canPrint}}
+                    <button type="button" class="btn btn-default pull-left" id="printTabularDataContent">
+                        Print
+                    </button>
+                {{/if}}
+                {{#if exportCsv}}
+                    <button type="button" class="btn btn-default pull-left" id="csvTabularDataContent">
+                        CSV
+                    </button>
+                {{/if}}
+                {{#if canClickListView}}
+                    <button type="button" class="btn btn-default pull-left" id="changeToListView">
+                        {{listViewText}}
+                    </button>
+                {{/if}}
+                {{#if isFilter}}
+                    {{> searchStringFilter name=searchColumnName value=getSearchText}}
+                {{/if}}
+            </div>
+
+            {{#if alphaFilter}}
+                <div class="">
+                    <ul class="swiper-wrapper Calphabets">
+                        {{#each albhabets}}
+                            <div class="swiper-container Calphabets swiper-container-horizontal">
+                                <ul class="swiper-wrapper">
+                                    <li class="swiper-slide alphabetChar floatLeft ">
+                                        {{this}}
+                                    </li>
+                                </ul>
+                            </div>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/if}}
+            {{#if tabView}}
+                {{#let thumbnail=thumbnailTemplate}}
+                    <div id="tabularDataContent">
+                        {{#each getTableData}}
+                            {{> UI.dynamic template=thumbnail data=this }}
+                            <!--<div class="col-md-3 col-lg-3 ">-->
+                            <!--<div class="thumb_block">-->
+
+                                <!--{{#each this.columnData}}-->
+                            <!--<div class="" style="overflow-x: hidden">-->
+
+                                <!--{{#if equals this.type 'img'}}-->
+                                <!--{{{this.value}}}-->
+                                    <!--{{else}}-->
+                                    <!--{{#if this.value.templateName}}-->
+                                    <!--{{> UI.dynamic template=this.templateName data=this.value.data}}-->
+                                        <!--{{else}}-->
+                                    <!--{{this.value}}-->
+                                    <!--&lt;!&ndash;<div class="generaltable-Cell " data-toggle="tooltip" title="{{this.value}}"&ndash;&gt;-->
+                                    <!--&lt;!&ndash;data-placement="top" style="overflow-x:hidden "><span&ndash;&gt;-->
+                                    <!--&lt;!&ndash;class=""></span></div>&ndash;&gt;-->
+                                        <!--{{/if}}-->
+                                <!--&lt;!&ndash;{{this.value}}<br/>&ndash;&gt;-->
+                                    <!--{{/if}}-->
+                            <!--</div>-->
+                                <!--{{/each}}-->
+                            <!--</div>-->
+                            <!--</div>-->
+                        {{/each}}
+                    </div>
+                {{/let}}
+                <div class="col-md-12 col-lg-12 ">
+
+                    <div class="col-md-4 col-lg-4"></div>
+                    <div class="{{moreResults}} col-md-4 col-lg-4 textCenter">
+                        <ul class="pagination">
+                            <li class="{{moreResults}}">
+                                <a href="#" id="loadMore">
+                                    Load More <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <!--<a href="#" id="loadMore">-->
+                        <!--Load More <span aria-hidden="true">&rarr;</span>-->
+                        <!--</a>-->
+                    </div>
+
+                    <div class="col-md-4 col-lg-4 "></div>
+                </div>
+            {{else}}
+                <div id="tabularDataContent" class="table-responsive col-md-12 col-lg-12 ">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            {{#each getRsTableTitle}}
+                                <th>{{this.Title}}
+                                    {{#if this.sort}}
+                                        <a href="#" class="{{getSortColumnStatus this.data 'class'}}"
+                                           data-sorted="{{checkSortingOfColumnSorted this}}">
+                                            {{#with checkSortingOfColumn this}}
+                                                <span><i class="fa {{this}}"></i></span>
+                                            {{/with}}
+                                        </a>
+                                    {{/if}}
+                                </th>
+                            {{/each}}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {{#each getTableData}}
+                            <tr class="t-row">
+                                {{#each this.columnData}}
+                                    <td data-toggle="tooltip" title="{{this.value}}" data-placement="top">
+                                        {{#if equals this.type 'img'}}
+                                            <img src="{{this.value}}" width="20" height="20">
+                                            <!--{{{this.value}}}<br/>-->
+                                        {{else}}
+                                            {{#if this.value.templateName}}
+                                                {{> UI.dynamic template=this.value.templateName data=this.value.data}}
+                                            {{else}}
+                                                {{this.value}}
+                                            {{/if}}
+                                        {{/if}}
+
+
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            {{#with isAccordion ..}}
+                                <tr class="tr-accordian">
+                                    <td colspan="{{../columnLength}}">
+                                        {{> UI.dynamic template=this data=../collectionData}}
+                                    </td>
+                                </tr>
+                            {{/with}}
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 col-lg-12 ">
+
+                    <div class="col-md-3 col-lg-3">
+                        <div class="tableRow">
+                            <div class="tableCol alignRight paddingRight10 colorBlue1 fontSize16">
+                                <span>Page Limit :</span>
+                            </div>
+                            <div class="tableCol width30">
+                                <div class="floating-labe1">
+                                    <div class="form-group global-select">
+                                        <select class=" form-control selectPageLimit width100 " style="">
+                                            {{#with getCurrentPageLimit}}
+                                                <option value="10" {{isSelected this 10}}>10</option>
+                                                <option value="20" {{isSelected this 20}}>20</option>
+                                                <option value="50" {{isSelected this 50}}>50</option>
+                                                <option value="100" {{isSelected this 100}}>100</option>
+                                                <option value="1000" {{isSelected this 1000}}>1000</option>
+                                            {{/with}}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6 textCenter">
+                        <ul class="pagination" style="margin: 0;">
+                            <li class="{{lessResults}}">
+                                <a href="#" id="first">
+                                    First
+                                </a>
+                            </li>
+                            <li class="{{lessResults}}">
+                                <a href="#" id="previous">
+                                    <span aria-hidden="true">&larr;</span> Previous
+                                </a>
+                            </li>
+
+                            {{#each getPagination}}
+                                <li class="{{currentPageNumberClass this}}"><a href="#" class="paginationNumber"
+                                                                               data-page="{{this}}">{{this}}</a>
+                                </li>
+                            {{/each}}
+
+                            <li class="{{moreResults}}">
+                                <a href="#" id="next">
+                                    Next <span aria-hidden="true">&rarr;</span>
+                                </a>
+                            </li>
+                            <li class="{{moreResults}}">
+                                <a href="#" id="last">
+                                    Last
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3 col-lg-3 alignRight">
+                        Showing {{startIndex}} to {{endIndex}} of {{totalRecords}} entries
+                    </div>
+                </div>
+
+            {{/if}}
+        {{else}}
+            {{> spinner}}
+        {{/if}}
+    </div>
+</template>
+<template name="thumbRsView">
+    <div class="col-md-3 col-lg-3 ">
+        <div class="thumb_block">
+
+            {{#each this.columnData}}
+                <div class="" style="overflow-x: hidden">
+
+                    {{#if equals this.type 'img'}}
+                        {{{this.value}}}
+                    {{else}}
+                        {{#if this.value.templateName}}
+                            {{> UI.dynamic template=this.templateName data=this.value.data}}
+                        {{else}}
+                            {{this.value}}
+                            <!--<div class="generaltable-Cell " data-toggle="tooltip" title="{{this.value}}"-->
+                            <!--data-placement="top" style="overflow-x:hidden "><span-->
+                            <!--class=""></span></div>-->
+                        {{/if}}
+                        <!--{{this.value}}<br/>-->
+                    {{/if}}
+                </div>
+            {{/each}}
+        </div>
+    </div>
+</template>
+<template name="searchStringFilter">
+    <div class="pull pull-right ">
+        <label for="searchbox"> {{this.name}} </label> <input name="searchbox" class="searchTextFilter"
+                                                              value="{{this.value}}"/>
+    </div>
+</template>
+<template name="accordionTestTemplate">
+    No Data
+</template>

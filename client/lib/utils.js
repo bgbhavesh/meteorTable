@@ -1,0 +1,3 @@
+PAGE_LIMIT = 10;
+PAGE_LIMIT_MR =10;
+
