@@ -5,6 +5,7 @@
 // export const name = 'meteortable';
 //import commonTabular from "../lib/utils.js"
 //import commonTabular from "../lib/_common.js"
+import './meteortable.html'
 Template.meteortable.onCreated(function () {
     Session.set('methodTabularCallReceivedTime', new Date());
     var template = this;
