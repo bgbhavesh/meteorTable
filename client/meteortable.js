@@ -3,7 +3,7 @@
 // Variables exported by this module can be imported by other packages and
 // applications. See meteorTabutiles-tests.js for an example of importing.
 export const name = 'meteortable';
-import utils from "../client/lib/utils.js"
+//import commonTabular from "../lib/utils.js"
 //import commonTabular from "../lib/_common.js"
 Template.meteortable.onCreated(function () {
     Session.set('methodTabularCallReceivedTime', new Date());
