@@ -2,7 +2,7 @@
 
 // Variables exported by this module can be imported by other packages and
 // applications. See meteorTabutiles-tests.js for an example of importing.
-export const name = 'meteortable';
+// export const name = 'meteortable';
 //import commonTabular from "../lib/utils.js"
 //import commonTabular from "../lib/_common.js"
 Template.meteortable.onCreated(function () {
