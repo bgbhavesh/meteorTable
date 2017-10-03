@@ -1,6 +1,6 @@
 Package.describe({
   name: 'bucky:meteortable',
-  version: '0.0.10',
+  version: '0.0.13',
   // Brief, one-line summary of the package.
   summary: 'use meteor call for table display and export csv',
   // URL to the Git repository containing the source code for this package.
@@ -24,7 +24,9 @@ Package.onUse(function(api) {
         'tracker',
         'session',
         'templating',
-        'fortawesome:fontawesome@4.7.0'
+        'fortawesome:fontawesome@4.7.0',
+        'reactive-dict',
+        'sacha:spin@2.3.1'
     ]);
     api.use(['jquery'], 'client', {weak: true});
     api.addFiles('client/css/style.css', 'client');

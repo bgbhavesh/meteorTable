@@ -15,7 +15,7 @@ Meteor.methods({
                 recordTotal: 0,
                 records: []
             };
-            let aggregateQuery = rsMethodTest[queryName](selector, sort, fields);
+            let aggregateQuery = leoMethodQuery[queryName](selector, sort, fields);
             let aggregateRsResultsCount = global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
             let fullQuery = [];
             _.each(aggregateQuery, function (query) {
@@ -38,7 +38,7 @@ Meteor.methods({
             check(sort,Object);
             check(skip,Number);
             check(limit,Number);
-            let aggregateQuery = rsMethodTest[queryName](selector, sort, fields);
+            let aggregateQuery = leoMethodQuery[queryName](selector, sort, fields);
             aggregateQuery.splice(0,0,{"$match": selector},{$skip: skip},{$limit: limit});
             try{
                 return global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
