@@ -15,7 +15,7 @@ Meteor.methods({
                 recordTotal: 0,
                 records: []
             };
-            let aggregateQuery = {};
+            let aggregateQuery = [];
             if(queryName && queryName.indexOf('.')>=0){
                 aggregateQuery = global[queryName.split(".")[0]][queryName.split(".")[1]](selector, sort, fields);
             }
@@ -24,7 +24,7 @@ Meteor.methods({
             }
             else{
                 console.log(aggregateQuery+' is not proper');
-                return finalObject;
+                // return finalObject;
             }
             try {
                 let aggregateRsResultsCount = [];
@@ -65,10 +65,32 @@ Meteor.methods({
             check(sort, Object);
             check(skip, Number);
             check(limit, Number);
-            let aggregateQuery = leoMethodQuery[queryName](selector, sort, fields);
+            let aggregateQuery = [];
+            if(queryName && queryName.indexOf('.')>=0){
+                aggregateQuery = global[queryName.split(".")[0]][queryName.split(".")[1]](selector, sort, fields);
+            }
+            else if(queryName){
+                aggregateQuery = global[queryName](selector, sort, fields);
+            }
+            else{
+                console.log(aggregateQuery+' is not proper');
+                // return finalObject;
+            }
+            // let aggregateQuery = leoMethodQuery[queryName](selector, sort, fields);
             aggregateQuery.splice(0, 0, {"$match": selector}, {$skip: skip}, {$limit: limit});
             try {
-                return global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
+                let aggregateRsResultsCount = [];
+                if(collectionsName && collectionsName.indexOf(".")>=0){
+                    return aggregateRsResultsCount = global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
+                }
+                else if(collectionsName){
+                    return aggregateRsResultsCount = global[[collectionsName]].aggregate(aggregateQuery);
+                }
+                else{
+                    console.log('Collection Name is Not passed properly');
+                    return [];
+                }
+                // return global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
             }
             catch (e) {
                 throw new Meteor.Error(e)
