@@ -32,3 +32,5 @@ template call accept argument
 		isFilter    boolean
 		tabView boolean
 # meteortable
+
+example can be seen in https://github.com/bgbhavesh/leoWebsite
