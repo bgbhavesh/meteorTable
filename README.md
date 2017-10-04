@@ -4,25 +4,28 @@ template call accept argument
 	config->
 		collectionsName string
 		aggregateQuery  sting
+		aggregateFullQuery string
 		name    string
-		order   [1, 'desc']
+		order   [0, 'desc']
 		canPrint    boolean
 		tabView boolean
 		isFilter boolean
+		exportCsv boolean
 		alphaFilter boolean
 		filterFields    array
 		defaultImage string
 		thumbnailTemplate string
 		tableViewConfig object
 		    extraFields array
-		    columns object
+		    columns array
 		        data  string
 		        Title   string
 		        sort    boolean
 		        render  function    val, type, doc
 		        tmpl    string
 		        img boolean
-
+		    exportColumn array
+		
 		HTML->
 		dataReady   boolean
 		canPrint    boolean
