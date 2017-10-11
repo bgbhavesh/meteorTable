@@ -181,12 +181,15 @@ Template.meteortable.events({
                     });
                     csv = csv.concat(columnData.join(','), '\n');
                 });
-                var a = $("<a />", {
-                    href: 'data:application/csv;charset=UTF-8,' + encodeURIComponent(csv),
-                    "download": `${configName}.csv`
-                });
-                $("body").append(a);
-                a[0].click();
+                var FileSaver = require('file-saver');
+                var blob =new Blob([csv],{type: "text/plain;charset=utf-8"})
+                FileSaver.saveAs(blob, configName+".csv");
+                // var a = $("<a />", {
+                //     href: 'data:application/csv;charset=UTF-8,' + encodeURIComponent(csv),
+                //     "download": `${configName}.csv`
+                // });
+                // $("body").append(a);
+                // a[0].click();
             }
             // template.csvTabularData.set(true);
         })

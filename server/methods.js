@@ -131,7 +131,7 @@ Meteor.methods({
                                 columnData.push(objectPath.get(data, fieldName.data) || "-");
                             }
                             else {
-                                columnData.push("-")
+                                columnData.push("-");
                             }
                         });
                         tableData.push({"columnData": columnData});
