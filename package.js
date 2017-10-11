@@ -38,7 +38,7 @@ Package.onUse(function(api) {
 });
 Npm.depends({
     "object-path":"0.11.4",
-    "file-saver": "^1.3.3"
+    "file-saver": "1.3.3"
 });
 Package.onTest(function(api) {
   api.use('ecmascript');
