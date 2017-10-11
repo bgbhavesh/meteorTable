@@ -124,6 +124,7 @@ Template.meteortable.events({
             t.listView.set(true);
     },
     'click #csvTabularDataContent': function (e, t) {
+        t.csvLoading.set(true);
         let table = t.data.table;
         let configName = table.name;
         let collectionsName = table.collectionsName;
@@ -149,6 +150,7 @@ Template.meteortable.events({
         Meteor.call('dataContent', collectionsName, fields, selector, skip, limit, aggregateQuery, finalSort, columns, function (err, response) {
             if (err) {
                 console.log(err);
+                t.csvLoading.set(true);
             }
             else {
                 let csv = columns.map(e => e.Title || e.data).join(',').concat('\n');
@@ -181,9 +183,11 @@ Template.meteortable.events({
                     });
                     csv = csv.concat(columnData.join(','), '\n');
                 });
+                t.csvLoading.set(false);
                 var FileSaver = require('file-saver');
                 var blob =new Blob([csv],{type: "text/plain;charset=utf-8"})
                 FileSaver.saveAs(blob, configName+".csv");
+
                 // var a = $("<a />", {
                 //     href: 'data:application/csv;charset=UTF-8,' + encodeURIComponent(csv),
                 //     "download": `${configName}.csv`
@@ -400,6 +404,9 @@ Template.meteortable.helpers({
             return 'Tab'
         }
         else return 'List'
+    },
+    csvLoading:function () {
+        return Template.instance().csvLoading.get();
     },
     tabView: function () {
         if (this.table.tabView) {

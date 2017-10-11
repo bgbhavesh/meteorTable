@@ -8,9 +8,15 @@
                     </button>
                 {{/if}}
                 {{#if exportCsv}}
-                    <button type="button" class="btn btn-default pull-left" id="csvTabularDataContent">
-                        CSV
-                    </button>
+                    {{#if csvLoading}}
+                        <button type="button" class="btn btn-default pull-left has-spinner" style="font-size: 20px">
+                            <span class="spinner"><i class="fa fa-refresh fa-spin active"></i></span>
+                        </button>
+                    {{else}}
+                        <button type="button" class="btn btn-default pull-left" id="csvTabularDataContent">
+                            CSV
+                        </button>
+                    {{/if}}
                 {{/if}}
                 {{#if canClickListView}}
                     <button type="button" class="btn btn-default pull-left" id="changeToListView">
