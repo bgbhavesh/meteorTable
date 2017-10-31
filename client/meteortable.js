@@ -17,6 +17,8 @@ Template.meteortable.onCreated(function () {
     template.dataReady.set(false);
     template.listView = new ReactiveVar();
     template.listView.set(false);//
+    template.csvLoading = new ReactiveVar();
+    template.csvLoading.set(false);//
     template.csvTabularData = new ReactiveVar();
     template.csvTabularData.set(false);
     template.selector = new ReactiveDict();
