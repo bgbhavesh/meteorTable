@@ -16,8 +16,6 @@ Meteor.methods({
                 records: []
             };
             let aggregateQuery = [];
-            console.log(queryName);
-            debugger;
             if(queryName && queryName.indexOf('.')>=0){
                 aggregateQuery = global[queryName.split(".")[0]][queryName.split(".")[1]](selector, sort, fields);
             }

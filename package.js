@@ -1,6 +1,6 @@
 Package.describe({
   name: 'bucky:meteortable',
-  version: '0.0.24',
+  version: '0.0.25',
   // Brief, one-line summary of the package.
   summary: 'use meteor call for table display and export csv',
   // URL to the Git repository containing the source code for this package.
