@@ -77,23 +77,37 @@ Meteor.methods({
                 // return finalObject;
             }
             // let aggregateQuery = leoMethodQuery[queryName](selector, sort, fields);
-            aggregateQuery.splice(0, 0, {"$match": selector}, {$skip: skip}, {$limit: limit});
+            aggregateQuery.splice(0, 0, {"$match": selector});
             try {
-                let aggregateRsResultsCount = [];
-                if(collectionsName && collectionsName.indexOf(".")>=0){
-                    return aggregateRsResultsCount = global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
-                }
-                else if(collectionsName){
-                    return aggregateRsResultsCount = global[[collectionsName]].aggregate(aggregateQuery);
-                }
-                else{
-                    console.log('Collection Name is Not passed properly');
-                    return [];
-                }
-                // return global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
+                let aggregateQueryCount = _.union(aggregateQuery,[{$count:'recordTotal'}]);
+                console.log("Start getting count",new Date());
+                let resultCount = global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQueryCount);
+                console.log("end getting count",new Date());
+                let totalCount = (resultCount && resultCount[0] && resultCount[0].recordTotal)?resultCount[0].recordTotal:0;
+                let records = [];
+                let i=0;
+                do{
+                    let limitSkip = _.union(aggregateQuery,[{$skip: i},{$limit: 5000}]);
+                    console.log("query start "+i,new Date());
+                    records = records.concat(global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(limitSkip));
+                    console.log("query end "+i,new Date());
+                    i += 5000;
+                }while(i<totalCount);
+                return records;
+                // let aggregateRsResultsCount = [];
+                // if(collectionsName && collectionsName.indexOf(".")>=0){
+                //     return aggregateRsResultsCount = global[collectionsName.split(".")[0]][collectionsName.split(".")[1]].aggregate(aggregateQuery);
+                // }
+                // else if(collectionsName){
+                //     return aggregateRsResultsCount = global[[collectionsName]].aggregate(aggregateQuery);
+                // }
+                // else{
+                //     console.log('Collection Name is Not passed properly');
+                //     return [];
+                // }
             }
             catch (e) {
-                throw new Meteor.Error(e)
+                throw new Meteor.Error(e);
             }
 
             //     aggregateQuery.push({$out:'tempTabular'});
@@ -125,7 +139,7 @@ Meteor.methods({
                         _.each(columns, function (fieldName) {
                             var key = fieldName.data;
                             if (fieldName.render !== undefined) {
-                                columnData.push(fieldName.render(objectPath.get(data, key), "display", data))
+                                columnData.push(fieldName.render(objectPath.get(data, key), "display", data));
                             }
                             else if (fieldName.data && fieldName.data !== "") {
                                 columnData.push(objectPath.get(data, fieldName.data) || "-");
